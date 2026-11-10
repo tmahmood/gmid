@@ -80,8 +80,8 @@ both the launchers and the incoming missiles.
 
 - **Launcher** (environment turret)
   - Static, 4 placed around the arena at fixed positions.
-  - Tracks the player, fires a missile every 2.0–3.0 s (staggered start).
-  - 4 bullet hits to destroy; respawns after 7 s.
+  - Tracks the player, fires a missile every 3.0 s (staggered start).
+  - 3 bullet hits to destroy; respawns after 7 s.
   - Grants score when destroyed.
 
 - **Missile** (launcher projectile)
@@ -89,7 +89,7 @@ both the launchers and the incoming missiles.
   - Homes toward the player with a limited turn rate (2.2 rad/s), so it is
     dodgeable.
   - Lifetime 8 s; explodes on contact with the player or when shot down.
-  - Deals 18 damage on player contact.
+  - Deals 16 damage on player contact.
   - Grants score when shot down.
 
 - **Particle**
@@ -206,9 +206,31 @@ not tunnel projectiles through entities.
 
 - [x] Read and analyze `SPEC.md`
 - [x] Define plan and architecture (this document)
-- [ ] Scaffold project and verify SDL3 + egui build
-- [ ] Player movement, aim, firing
-- [ ] Launchers and homing missiles
-- [ ] Collisions, score, health, restart
-- [ ] HUD and polish
-- [ ] README and final push
+- [x] Scaffold project and verify SDL3 + egui build
+- [x] Player movement, aim, firing
+- [x] Launchers and homing missiles
+- [x] Collisions, score, health, restart
+- [x] HUD and polish
+- [x] README and final push
+
+---
+
+## 9. Verification log
+
+There is no automated test suite (explicitly out of scope), but the build and
+the game loop were exercised directly:
+
+1. `cargo build` — clean compile against SDL3 3.4.18 via `pkg-config`.
+2. `cargo fmt` — source formatted.
+3. `cargo clippy --all-targets` — no remaining warnings.
+4. Scripted runtime check under `Xvfb` with `xdotool`:
+   - Window opens, world and HUD render.
+   - Mouse aim and Space firing produce bullets.
+   - Launchers fire homing missiles that damage the player.
+   - Standing still leads to game over (HUD + overlay confirm).
+   - The game-over **Restart** button and the `R` key both reset the run.
+   - Movement keys move the player and bullets destroy launchers/missiles,
+     updating the score.
+
+The screenshot at `docs/screenshot.png` was captured from a live run.
+
